@@ -12,7 +12,7 @@ def validate_email(email):
 # Приклад використання:
 
 # Введення номера телефону та email
-phone_number = input("Введіть номер телефону: ")
+phone_number = input("Введіть номер телефону(формат:050 555 45 45):")
 # Перевірка правильності введення
 if validate_phone_number(phone_number):
     print("Номер телефону введено коректно.")
