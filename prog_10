@@ -1,0 +1,79 @@
+import json
+
+class NoteBook:
+    def __init__(self):
+        self.notes = []
+
+    # Додавання тегів до нотаток
+    def add_note(self, title, content, tags):
+        note = {"title": title, "content": content, "tags": tags}
+        self.notes.append(note)
+        print(f"Нотатку '{title}' додано.")
+
+    # Пошук за тегом
+    def search_notes_by_tag(self, tag):
+        matching_notes = [note for note in self.notes if tag in note["tags"]]
+        return matching_notes
+
+    # Модифікація методу пошуку, щоб обробляти список тегів
+    def search_notes_by_tags(self, tags):
+        matching_notes = [note for note in self.notes if all(tag in note["tags"] for tag in tags)]
+        return matching_notes
+
+    # Сортування за тегами
+    def sort_by_tag(self, tag):
+        sorted_notes = sorted(self.notes, key=lambda note: tag in note["tags"])
+        return sorted_notes
+
+    # Вибір сортування (вибір напряму та ключа сортування)
+    def sort_notes(self, key=lambda note: note["title"], reverse=False):
+        return sorted(self.notes, key=key, reverse=reverse)
+
+    # Виведення результатів пошуку
+    def display_search_results(self, search_results):
+        if not search_results:
+            print("Нотатки не знайдено.")
+        else:
+            print("Результати пошуку:")
+            for note in search_results:
+                print(f"Заголовок: {note['title']}")
+                print(f"Теги: {', '.join(note['tags'])}")
+                print(f"Вміст: {note['content']}")
+                print("-" * 30)
+
+    # Деталі нотаток (метод виведення дод. інфи для виведення нотаток)
+    def display_note_details(self, note):
+        print(f"Заголовок: {note['title']}")
+        print(f"Теги: {', '.join(note['tags'])}")
+        print(f"Вміст: {note['content']}")
+        print("-" * 30)
+
+    # Збереження даних між сеансами
+    def save_notes(self):
+        with open('notes.json', 'w') as file:
+            json.dump(self.notes, file, indent=2)
+
+    def load_notes(self):
+        try:
+            with open('notes.json', 'r') as file:
+                self.notes = json.load(file)
+        except FileNotFoundError:
+            self.notes = []
+
+# Приклад використання
+notebook = NoteBook()
+
+# Додатковий приклад введення нотаток
+notebook.add_note("Заголовок 1", "Вміст 1", ["тег1", "тег2"])
+notebook.add_note("Заголовок 2", "Вміст 2", ["тег3"])
+notebook.add_note("Заголовок 3", "Вміст 3", ["тег1"])
+
+# Зберегти дані
+notebook.save_notes()
+
+# Завантажити дані
+notebook.load_notes()
+
+# Виведення нотаток
+print("Всі нотатки:")
+notebook.display_notes()
